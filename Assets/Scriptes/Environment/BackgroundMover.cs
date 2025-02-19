@@ -8,11 +8,12 @@ public class BackgroundMover : MonoBehaviour
 
     private float _minPositionX;
     private Vector2 _restartPosition;
+    private int _multiplierForBoundary = 2;
 
     private void Awake()
     {
         _restartPosition = transform.position;
-        _minPositionX = _sprite.bounds.size.x  * 2 - _restartPosition.x;
+        _minPositionX = _sprite.bounds.size.x  * _multiplierForBoundary - _restartPosition.x;
     }
 
     public void Start()

@@ -13,7 +13,7 @@ public class EnemyMissileSpawner : AmmunitionSpawner
         _missilePool.ObjectIsInPool += Unsubscribe;
     }
 
-    private void Launch(Vector2 vector)
+    public void Launch(Vector2 vector)
     {
         EnemyMissile missile = _missilePool.GetObjectFromPool();
 

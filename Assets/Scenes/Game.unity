@@ -224,8 +224,8 @@ MonoBehaviour:
   _gorizontalStartPosition: 11
   _minOffsetOfPosition: 4
   _maxOffsetOfPosition: -4
-  _spawnTime: 5
-  _launchInterval: 4
+  _spawnTime: 10
+  _launchInterval: 2
 --- !u!4 &352095897
 Transform:
   m_ObjectHideFlags: 0
@@ -1338,7 +1338,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5231808822528280087, guid: b5f360d254b3cbc42b81fde4c8d101d6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.78
+      value: -8
       objectReference: {fileID: 0}
     - target: {fileID: 5231808822528280087, guid: b5f360d254b3cbc42b81fde4c8d101d6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1380,6 +1380,14 @@ PrefabInstance:
       propertyPath: _gameStarter
       value: 
       objectReference: {fileID: 1868296236}
+    - target: {fileID: 6874928638858201208, guid: b5f360d254b3cbc42b81fde4c8d101d6, type: 3}
+      propertyPath: _speed
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874928638858201208, guid: b5f360d254b3cbc42b81fde4c8d101d6, type: 3}
+      propertyPath: _leftLimit
+      value: -8
+      objectReference: {fileID: 0}
     - target: {fileID: 7675029522162604424, guid: b5f360d254b3cbc42b81fde4c8d101d6, type: 3}
       propertyPath: m_Name
       value: Player

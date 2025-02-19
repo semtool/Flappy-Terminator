@@ -6,22 +6,22 @@ public class Scorer : MonoBehaviour
     [SerializeField] private TMP_Text _text;
     [SerializeField] private EnemySpawner _enemyContactsDetector;
 
-    private int _counter = 0;
+    private int _fragsCounter = 0;
 
     private void OnEnable()
     {
-        _enemyContactsDetector.IsDestroy += ShowFragsNumber;
+        _enemyContactsDetector.IsDestroyed += ShowFragsNumber;
     }
 
     private void ShowFragsNumber()
     {
-        _counter++;
+        _fragsCounter++;
 
-        _text.text = _counter.ToString();
+        _text.text = _fragsCounter.ToString();
     }
 
     private void OnDisable()
     {
-        _enemyContactsDetector.IsDestroy -= ShowFragsNumber;
+        _enemyContactsDetector.IsDestroyed -= ShowFragsNumber;
     }
 }

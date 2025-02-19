@@ -26,7 +26,6 @@ public class InputReader : MonoBehaviour
         HorizontalDirection = Input.GetAxis(HorizontalAxis);
         VerticalalDirection = Input.GetAxis(VerticalAxis);
 
-
         if (Input.GetKeyDown(Shoot))
         {
             if (_isUnblocked)

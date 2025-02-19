@@ -31,7 +31,6 @@ public class PlayerMissileSpawner : AmmunitionSpawner
         missile.GetComponent<UniversalMover>().Fly();
 
         missile.GetComponent<MissileDetector>().IsStricked += PutToWeaponPool;
-
     }
 
     private void Unsubscribe(PlayerMissile missile)

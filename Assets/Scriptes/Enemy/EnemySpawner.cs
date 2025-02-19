@@ -13,19 +13,17 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int _spawnTime;
     [SerializeField] private int _launchInterval;
 
-    private WaitForSeconds _wait;
     private WaitForSeconds _delay;
     private int _minLayerNumber = 1;
     private int _maxLayerNumber = 5;
     private Coroutine _corutineForSignals;
 
     public event Action<Vector2> CoordinatsHasReceived;
-    public event Action IsDestroy;
+    public event Action IsDestroyed;
 
     private void Awake()
     {
-        _wait = new WaitForSeconds(_spawnTime);
-        _delay = new WaitForSeconds(_launchInterval);
+        _delay = new WaitForSeconds(_spawnTime);
     }
 
     private void OnEnable()
@@ -44,7 +42,7 @@ public class EnemySpawner : MonoBehaviour
         {
             SpawnItem();
 
-            yield return _wait;
+            yield return _delay;
         }
     }
 
@@ -54,7 +52,7 @@ public class EnemySpawner : MonoBehaviour
 
         SetCoordinateOfAppearance(enemy);
 
-        SendSignal(enemy);
+        enemy.SendSignalToMissale(CoordinatsHasReceived);
 
         enemy.GetComponent<UniversalMover>().Fly();
 
@@ -63,21 +61,6 @@ public class EnemySpawner : MonoBehaviour
         enemy.GetComponent<UniversalContactsDetector>().IsDestroyed += PutEnemyToPoolFromMissile;
 
         enemy.GetComponent<SpriteRenderer>().sortingOrder = GetRandomOffset(_minLayerNumber, _maxLayerNumber);
-    }
-
-    private void SendSignal(Enemy enemy)
-    {
-        _corutineForSignals = StartCoroutine(Inform(enemy));
-    }
-
-    private IEnumerator Inform(Enemy enemy)
-    {
-        while (enabled)
-        {
-            CoordinatsHasReceived?.Invoke(enemy.transform.position);
-
-            yield return _delay;
-        }
     }
 
     private void SetCoordinateOfAppearance(Enemy enemy)
@@ -91,11 +74,6 @@ public class EnemySpawner : MonoBehaviour
         if (gameObject.TryGetComponent(out Enemy enemy))
         {
             _enemyPool.PutObjectToPool(enemy);
-
-            if (_corutineForSignals != null)
-            {
-                StopCoroutine(_corutineForSignals);
-            }
         }
     }
 
@@ -105,7 +83,7 @@ public class EnemySpawner : MonoBehaviour
         {
             _enemyPool.PutObjectToPool(enemy);
 
-            IsDestroy?.Invoke();
+            IsDestroyed?.Invoke();
 
             if (_corutineForSignals != null)
             {

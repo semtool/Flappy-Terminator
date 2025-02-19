@@ -101,6 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1ab76373b1ee084793e5827c2174918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _missileStartInterval: 3
 --- !u!114 &1205889614127813775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,7 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b1a8ba1fa596c640aeef7bd5e29c6e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 2
+  _speed: 1
 --- !u!50 &-570383674706519598
 Rigidbody2D:
   serializedVersion: 4
