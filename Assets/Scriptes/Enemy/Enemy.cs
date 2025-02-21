@@ -1,18 +1,23 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(UniversalContactsDetector))]
+[RequireComponent(typeof(EnemyWeaponController))]
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private int _missileStartInterval;
-    
-    private WaitForSeconds _delay;
+    private EnemyWeaponController _enemyVision;
+
+    public event Action<Vector2> HasCoordinates;
 
     private void Awake()
     {
-        _delay = new WaitForSeconds(_missileStartInterval);
+        _enemyVision = GetComponent<EnemyWeaponController>();
+    }
+
+    private void OnEnable()
+    {
+        _enemyVision.AimIsDetected += SendCoordOfStart;
     }
 
     public float GetRandomOffset(float minOffsetOfPosition, float maxOffsetOfPosition)
@@ -20,18 +25,13 @@ public class Enemy : MonoBehaviour
         return Random.Range(minOffsetOfPosition, maxOffsetOfPosition);
     }
 
-    public void SendSignalToMissale(Action<Vector2> action)
+    private void SendCoordOfStart(Vector2 coordinates)
     {
-        StartCoroutine(Inform(action));
+        HasCoordinates?.Invoke(coordinates);
     }
 
-    private IEnumerator Inform(Action<Vector2> action)
+    private void OnDisable()
     {
-        while (true)
-        {
-            yield return _delay;
-
-            action?.Invoke(transform.position);
-        }
+        _enemyVision.AimIsDetected -= SendCoordOfStart;
     }
 }

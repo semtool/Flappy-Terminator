@@ -6,17 +6,13 @@ using Random = UnityEngine.Random;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] EnemyPool _enemyPool;
-    [SerializeField] Barrier _barrier;
-    [SerializeField] private float _gorizontalStartPosition;
     [SerializeField] private float _minOffsetOfPosition;
     [SerializeField] private float _maxOffsetOfPosition;
     [SerializeField] private int _spawnTime;
-    [SerializeField] private int _launchInterval;
 
     private WaitForSeconds _delay;
     private int _minLayerNumber = 1;
     private int _maxLayerNumber = 5;
-    private Coroutine _corutineForSignals;
 
     public event Action<Vector2> CoordinatsHasReceived;
     public event Action IsDestroyed;
@@ -52,7 +48,9 @@ public class EnemySpawner : MonoBehaviour
 
         SetCoordinateOfAppearance(enemy);
 
-        enemy.SendSignalToMissale(CoordinatsHasReceived);
+        enemy.GetComponent<EnemyWeaponController>().MonitorSpace();
+
+        enemy.GetComponent<EnemyWeaponController>().AimIsDetected += SendCoordinatesOfStart;
 
         enemy.GetComponent<UniversalMover>().Fly();
 
@@ -63,32 +61,38 @@ public class EnemySpawner : MonoBehaviour
         enemy.GetComponent<SpriteRenderer>().sortingOrder = GetRandomOffset(_minLayerNumber, _maxLayerNumber);
     }
 
+    private void SendCoordinatesOfStart(Vector2 vector)
+    {
+        CoordinatsHasReceived?.Invoke(vector);
+    }
+
     private void SetCoordinateOfAppearance(Enemy enemy)
     {
         enemy.transform.position =
-        new Vector2(_gorizontalStartPosition, transform.position.y + enemy.GetRandomOffset(_minOffsetOfPosition, _maxOffsetOfPosition));
+        new Vector2(transform.position .x, transform.position.y + enemy.GetRandomOffset(_minOffsetOfPosition, _maxOffsetOfPosition));
     }
 
     private void PutEnemyToPoolFromBarrier(GameObject gameObject)
     {
-        if (gameObject.TryGetComponent(out Enemy enemy))
-        {
-            _enemyPool.PutObjectToPool(enemy);
-        }
+
+        PootToPool(gameObject);
     }
 
     private void PutEnemyToPoolFromMissile(GameObject gameObject)
+    {
+        PootToPool(gameObject);
+
+        IsDestroyed?.Invoke();
+    }
+
+
+    private void PootToPool(GameObject gameObject)
     {
         if (gameObject.TryGetComponent(out Enemy enemy))
         {
             _enemyPool.PutObjectToPool(enemy);
 
-            IsDestroyed?.Invoke();
-
-            if (_corutineForSignals != null)
-            {
-                StopCoroutine(_corutineForSignals);
-            }
+            gameObject.GetComponent<EnemyWeaponController>().RechargeWeaponStstem();
         }
     }
 
@@ -101,6 +105,7 @@ public class EnemySpawner : MonoBehaviour
     {
         enemy.GetComponent<UniversalContactsDetector>().IsTouched -= PutEnemyToPoolFromBarrier;
         enemy.GetComponent<UniversalContactsDetector>().IsDestroyed -= PutEnemyToPoolFromMissile;
+        enemy.GetComponent<EnemyWeaponController>().AimIsDetected -= SendCoordinatesOfStart;
     }
 
     private void OnDisable()

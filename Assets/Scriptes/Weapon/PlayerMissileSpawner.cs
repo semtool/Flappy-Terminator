@@ -9,7 +9,7 @@ public class PlayerMissileSpawner : AmmunitionSpawner
 
     private InputReader _input;
 
-    public  event Action EnemyIsDestoyed;
+    public event Action EnemyIsDestoyed;
 
     private void Awake()
     {

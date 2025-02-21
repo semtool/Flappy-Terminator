@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerMover))]
@@ -5,6 +6,8 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private UniversalContactsDetector _contactsDetector;
+
+    public event Action Disappeared;
 
     private void Awake()
     {
@@ -24,5 +27,7 @@ public class Player : MonoBehaviour
     private void Disappear()
     {
         Destroy(gameObject);
+
+        Disappeared?.Invoke();
     }
 }

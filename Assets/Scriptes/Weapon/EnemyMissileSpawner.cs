@@ -6,14 +6,15 @@ public class EnemyMissileSpawner : AmmunitionSpawner
 {
     [SerializeField] EnemySpawner _enemySpawner;
     [SerializeField] EnemyMissilePool _missilePool;
+    [SerializeField] int _maxNumberOfMissiles;
 
     private void OnEnable()
     {
-        _enemySpawner.CoordinatsHasReceived += Launch;
+        _enemySpawner.CoordinatsHasReceived += LaunchMissiles;
         _missilePool.ObjectIsInPool += Unsubscribe;
     }
 
-    public void Launch(Vector2 vector)
+    private void LaunchMissiles(Vector2 vector)
     {
         EnemyMissile missile = _missilePool.GetObjectFromPool();
 
@@ -39,7 +40,7 @@ public class EnemyMissileSpawner : AmmunitionSpawner
 
     private void OnDisable()
     {
-        _enemySpawner.CoordinatsHasReceived -= Launch;
+        _enemySpawner.CoordinatsHasReceived -= LaunchMissiles;
         _missilePool.ObjectIsInPool -= Unsubscribe;
     }
 }
